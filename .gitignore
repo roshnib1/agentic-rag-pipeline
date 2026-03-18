@@ -1,0 +1,8 @@
+venv/
+__pycache__/
+*.pyc
+.env
+vectorstore/faiss_index/
+uploaded_docs/
+*.egg-info/
+.DS_Store
