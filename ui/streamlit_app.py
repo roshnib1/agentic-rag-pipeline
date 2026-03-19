@@ -57,7 +57,7 @@ with st.sidebar:
 
     # Mode selector
     st.header("🔀 Mode")
-    mode = st.radio("Select mode", ["Chat", "Quiz", "Evaluate"], 
+    mode = st.radio("Select mode", ["Chat", "Quiz", "Evaluate"],
                     index=["Chat", "Quiz", "Evaluate"].index(st.session_state.mode))
     st.session_state.mode = mode
 
@@ -116,27 +116,30 @@ if st.session_state.mode == "Chat":
     question = st.chat_input("Ask a question about your documents...")
 
     if question:
-        if not st.session_state.indexed:
-            st.error("Please upload and index documents first!")
-        else:
-            with st.chat_message("user"):
-                st.write(question)
+        with st.chat_message("user"):
+            st.write(question)
 
-            with st.chat_message("assistant"):
-                with st.spinner("Thinking..."):
-                    result = run_agent(question, st.session_state.chat_history)
-                    answer = result["answer"]
-                    sources = list(set(result["sources"]))
+        with st.chat_message("assistant"):
+            with st.spinner("Thinking..."):
+                result = run_agent(question, st.session_state.chat_history,
+                                   pdf_indexed=st.session_state.indexed)
+                answer = result["answer"]
+                sources = list(set(result["sources"]))
                 st.write(answer)
-                if sources:
-                    with st.expander("📚 Sources"):
-                        for source in sources:
-                            st.write(f"• {source}")
+            if sources:
+                with st.expander("📚 Sources"):
+                    for source in sources:
+                        st.write(f"• {source}")
 
-            st.session_state.chat_history.append({"role": "user", "content": question})
-            st.session_state.chat_history.append({
-                "role": "assistant", "content": answer, "sources": sources
-            })
+        st.session_state.chat_history.append({
+            "role": "user",
+            "content": question
+        })
+        st.session_state.chat_history.append({
+            "role": "assistant",
+            "content": answer,
+            "sources": sources
+        })
 
 # ─── QUIZ MODE ───
 elif st.session_state.mode == "Quiz":
@@ -157,7 +160,6 @@ elif st.session_state.mode == "Quiz":
             st.balloons()
             st.title("🎉 Quiz Complete!")
 
-            # Score card
             percentage = (score / total) * 100
             col1, col2, col3 = st.columns(3)
             col1.metric("Score", f"{score}/{total}")
@@ -171,7 +173,6 @@ elif st.session_state.mode == "Quiz":
 
             st.divider()
 
-            # Review all answers
             st.subheader("📝 Review Answers")
             for i, (q, user_ans) in enumerate(zip(questions, quiz["answers"])):
                 correct = q["answer"]
@@ -195,14 +196,12 @@ elif st.session_state.mode == "Quiz":
 
         # ── Active Quiz ──
         else:
-            # Progress bar
             progress = current / total
             st.progress(progress, text=f"Question {current + 1} of {total}")
 
             q = questions[current]
             st.subheader(f"Q{current + 1}: {q['question']}")
 
-            # MCQ
             if q["type"] == "mcq":
                 options = [f"{k}. {v}" for k, v in q["options"].items()]
                 selected = st.radio("Choose your answer:", options, key=f"q_{current}")
@@ -227,7 +226,6 @@ elif st.session_state.mode == "Quiz":
                     time.sleep(1.5)
                     st.rerun()
 
-            # True/False
             elif q["type"] == "truefalse":
                 selected = st.radio("Choose your answer:", ["True", "False"], key=f"q_{current}")
 
