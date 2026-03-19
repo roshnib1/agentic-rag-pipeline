@@ -41,3 +41,26 @@ Answer:
     })
 
     return {**state, "answer": response.content}
+
+
+def direct_answer(state: dict) -> dict:
+    question = state["question"]
+
+    prompt = PromptTemplate.from_template("""
+You are a helpful assistant. Answer this general question conversationally.
+
+Question: {question}
+
+Answer:
+""")
+
+    llm = ChatGroq(
+        model=LLM_MODEL,
+        groq_api_key=GROQ_API_KEY,
+        temperature=0.5
+    )
+
+    chain = prompt | llm
+    response = chain.invoke({"question": question})
+
+    return {**state, "answer": response.content, "sources": []}
