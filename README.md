@@ -3,7 +3,7 @@
 An intelligent document research assistant built with **LangGraph**, **FAISS**, and **Groq LLM**. Upload any PDF and either ask complex questions across all documents or auto-generate a quiz to test your understanding — powered by a multi-agent pipeline that makes decisions at runtime.
  
 ---
-## ✨ Features
+## Features
  
 - **Multi-agent LangGraph pipeline** — router node intelligently decides whether to search documents or answer directly
 - **Semantic search** — FAISS vector store with HuggingFace embeddings for fast, accurate retrieval
