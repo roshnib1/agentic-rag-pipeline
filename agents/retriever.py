@@ -1,3 +1,5 @@
+import cmd
+
 from vectorstore.indexer import load_index
 from core.config import TOP_K_RESULTS
 
