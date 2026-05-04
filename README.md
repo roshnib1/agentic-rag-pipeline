@@ -1,4 +1,6 @@
 #  Agentic RAG Research & Quiz Assistant
+
+🔗 Live Demo: https://agentic-rag-pipeline-ufkym3wfdnykwu6kn7872x.streamlit.app
  
 An intelligent document research assistant built with **LangGraph**, **FAISS**, and **Groq LLM**. Upload any PDF and either ask complex questions across all documents or auto-generate a quiz to test your understanding — powered by a multi-agent pipeline that makes decisions at runtime.
  
