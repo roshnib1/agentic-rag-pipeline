@@ -25,7 +25,7 @@ jobs:
 
     - name: Run tests
       run: |
-        pytest tests/ -v
+        python -m pytest -v
 
     - name: Tests passed
       run: echo "All tests passed! Ready for deployment."
